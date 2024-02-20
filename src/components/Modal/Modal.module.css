@@ -1,0 +1,18 @@
+.Mcoins {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-top: 10px;
+  max-width: auto;
+}
+
+.McoinsLeft {
+  display: flex;
+  gap: 5px;
+}
+.nameCoin {
+  font-weight: 650;
+}
+.tagCoin {
+  font-family: system-ui;
+}

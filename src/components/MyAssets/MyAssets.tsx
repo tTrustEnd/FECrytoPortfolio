@@ -90,7 +90,12 @@ const MyAssets = (props: Props) => {
   return (
     <div className={styles.cMyAssets}>
       <h3>Assets</h3>
-      <Table columns={columns} dataSource={data} onChange={onChange} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        onChange={onChange}
+        style={{ overflow: "auto" }}
+      />
     </div>
   );
 };

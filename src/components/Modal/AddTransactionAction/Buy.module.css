@@ -1,0 +1,27 @@
+.GInput {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+.n {
+  font-size: 16px;
+  font-weight: 600;
+  padding-bottom: 8px;
+}
+.GInput input {
+  width: 100%;
+}
+.input {
+  width: 95%;
+}
+.totalSpent{
+    background: rgb(239, 242, 245);
+    border-radius: 8px;
+    margin-top: 16px;
+    padding: 16px;
+}
+.totalSpent .money{
+    font-size: 30px;
+    font-weight: 600;
+}
