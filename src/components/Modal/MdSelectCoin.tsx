@@ -4,7 +4,6 @@ import styles from "./Modal.module.css";
 import { RightOutlined } from "@ant-design/icons";
 import MdAddTransition from "./MdAddTransition";
 import { Coin } from "@/type/type";
-import { handleGetCoinList } from "@/api/coin";
 import { AppContext } from "@/context/AppContext";
 
 const MdSelectCoin = ({ isMdSelectCoinOpen, setIsMdSelectCoinOpen }: any) => {
@@ -42,7 +41,6 @@ const MdSelectCoin = ({ isMdSelectCoinOpen, setIsMdSelectCoinOpen }: any) => {
       <MdAddTransition
         isMAddTransitionOpen={isMAddTransitionOpen}
         setIsMAddTransition={setIsMAddTransition}
-        coin=""
       />
       <Modal
         title={<h2>Select Coin</h2>}

@@ -1,11 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./MyMainPortfolio.module.css";
-import { Button, Flex } from "antd";
+import { Button, Flex, Switch } from "antd";
 import MdSelectCoin from "../Modal/MdSelectCoin";
+import { AppContext } from "@/context/AppContext";
+import { Coin } from "@/type/type";
 type Props = {};
 
 const MyMainPortfolio = (props: Props) => {
   const [isMdSelectCoinOpen, setIsMdSelectCoinOpen] = useState<boolean>(false);
+  const {
+    listCoins,
+    setListCoins,
+    myCoins,
+    setMyCoins,
+    coinSelected,
+    setcoinSelected,
+  }: any = useContext(AppContext);
+  const onChange = (checked: boolean) => {
+    console.log(`switch to ${checked}`);
+  };
+
+  let totalPortfolio: number = 0;
+  listCoins?.find((item: Coin) => {
+    myCoins?.map((myc: any) => {
+      if (item.name === myc.state) {
+        totalPortfolio += +item?.current_price * myc?.quantity;
+      }
+    });
+  });
+
   return (
     <>
       <MdSelectCoin
@@ -21,13 +44,19 @@ const MyMainPortfolio = (props: Props) => {
             </div>
             <div>My Main Portfolio</div>
           </div>
-          <div className={styles.totalMoney}>$111,666.98</div>
-          <div className={styles.Profit_loss}>+ $111,666.98 (24h)</div>
+          <div className={styles.totalMoney}>
+            $ {totalPortfolio.toLocaleString("en")}
+          </div>
         </div>
 
         <div className={styles.rightInforPortfolio}>
-          <Flex gap="small" wrap="nowrap">
-            <Button>Default Button</Button>
+          <Flex
+            gap="small"
+            wrap="nowrap"
+            className={styles.antFlex}
+          >
+            <div className={styles.textChars}>Show Chars</div>
+            <Switch defaultChecked onChange={onChange} />
             <Button
               onClick={() => {
                 setIsMdSelectCoinOpen(true);

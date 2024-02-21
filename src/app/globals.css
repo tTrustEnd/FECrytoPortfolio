@@ -13,6 +13,9 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
 }
+@media screen and (max-width:768px){
+  body{padding: 1% 1% 1% 1%}
+}
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 26px;
   position: absolute;
@@ -31,6 +34,6 @@ body {
 }
 body {
   scrollbar-width: thin;
-  scrollbar-color: #fff #fff; /* Track and thumb colors */
+  scrollbar-color: #e9e4e4 #fff; /* Track and thumb colors */
 }
 

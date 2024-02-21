@@ -6,7 +6,8 @@ import style from "./Buy.module.css";
 import { InputNumber } from "antd";
 import { AppContext } from "@/context/AppContext";
 import { formatState, formatState2 } from "@/function/utilities";
-const BuySell = ({ type }) => {
+
+const BuySell = ({ type, setIsMAddTransition }) => {
   const {
     listCoins,
     setListCoins,
@@ -15,9 +16,9 @@ const BuySell = ({ type }) => {
     coinSelected,
     setcoinSelected,
   } = useContext(AppContext);
-  console.log("coinSelected", coinSelected);
   const [PricePer, setPricePer] = useState();
   const [Quantity, setQuantity] = useState(0);
+  const [check, setcheck] = useState(false);
   useEffect(() => {
     $(".js-example-basic-single").select2({
       templateResult: formatState,
@@ -28,6 +29,7 @@ const BuySell = ({ type }) => {
       const item = listCoins.find((item) => {
         return item.name === e.target.value;
       });
+      setcoinSelected(e.target.value);
       setPricePer(item?.current_price);
     });
     setPricePer(
@@ -43,14 +45,47 @@ const BuySell = ({ type }) => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const formElements = event.target.querySelectorAll("[name]");
-
-    formElements.forEach((element) => {
+    const updatedCoins = Array.from(formElements).reduce((acc, element) => {
       const name = element.getAttribute("name");
       const value = element.value || element.textContent;
 
-      console.log(`${name}: ${value}`);
+      return { ...acc, [name]: value };
+    }, {});
+
+    const isExis = myCoins.find((item) => {
+      return item.state === updatedCoins.state;
     });
+    if (updatedCoins.quantity == 0) {
+      setcheck(true);
+      return;
+    }
+    setcheck(false);
+    if (isExis) {
+      const updatedMyCoins = myCoins.map((item) => {
+        if (item.state === updatedCoins.state) {
+          return {
+            ...item,
+            quantity: Number(item.quantity) + Number(updatedCoins.quantity),
+            AvgPurchasePrice:
+              (Number(item?.AvgPurchasePrice) * item?.quantity +
+                updatedCoins?.quantity * updatedCoins?.AvgPurchasePrice) /
+              (Number(item?.quantity) + Number(updatedCoins?.quantity)),
+          };
+        }
+        return item;
+      });
+
+      setMyCoins(updatedMyCoins);
+      setIsMAddTransition(false);
+    } else {
+      const item = listCoins.find((item) => {
+        return item.name === updatedCoins.state;
+      });
+      setMyCoins([...myCoins, { ...updatedCoins, item }]);
+      setIsMAddTransition(false);
+    }
   };
+
   return (
     <div className={style.cBuy}>
       <form onSubmit={handleFormSubmit}>
@@ -59,6 +94,7 @@ const BuySell = ({ type }) => {
           className="js-example-basic-single"
           name="state"
           value={coinSelected}
+          onChange={()=>{}}
         >
           {listCoins?.map((item) => {
             return (
@@ -77,10 +113,15 @@ const BuySell = ({ type }) => {
                 size="middle"
                 defaultValue={0}
                 name="quantity"
+                min={0}
+                value={Quantity}
                 onChange={(value) => {
                   setQuantity(value);
                 }}
               />
+              {check && (
+                <p style={{ color: "red" }}>Quantity must be greater than 0</p>
+              )}
             </div>
           </div>
           <div style={{ width: "100%" }}>
@@ -90,9 +131,10 @@ const BuySell = ({ type }) => {
                 defaultValue={0}
                 className={style.input}
                 size="middle"
-                name="Price"
+                name="AvgPurchasePrice"
                 value={PricePer}
                 precision={6}
+                onChange={(value) => setPricePer(value)}
               />
             </div>
           </div>

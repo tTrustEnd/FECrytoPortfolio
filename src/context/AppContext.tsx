@@ -1,22 +1,26 @@
 import { handleGetCoinList } from "@/api/coin";
 import { dataDemo } from "@/function/utilities";
-import { Coin } from "@/type/type";
 import { createContext, useEffect, useState } from "react";
 
 export const AppContext = createContext({});
 
 export const AppProvider = ({ children }: any) => {
   const getData = async () => {
-    // const res = await handleGetCoinList();
-    setListCoins(dataDemo);
+    const res = await handleGetCoinList();
+    setListCoins(res);
   };
   useEffect(() => {
     getData();
-    return () => {};
+    const intervalId = setInterval(() => {
+      getData();
+    }, 45000);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
   const [listCoins, setListCoins] = useState<any>([]);
-  const [coinSelected, setcoinSelected] = useState("ss");
-  const [myCoins, setMyCoins] = useState<Coin[]>([]);
+  const [coinSelected, setcoinSelected] = useState("");
+  const [myCoins, setMyCoins] = useState<any>([]);
   return (
     <AppContext.Provider
       value={{

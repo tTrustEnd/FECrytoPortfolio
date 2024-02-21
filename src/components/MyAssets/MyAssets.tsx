@@ -1,13 +1,20 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./MyAssets.module.css";
-import { Table } from "antd";
+import { Statistic, Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  CaretDownFilled,
+  CaretUpOutlined,
+  DeleteOutlined,
+  MinusOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import MdAddTransition from "../Modal/MdAddTransition";
 import MdRemoveCoin from "../Modal/MdRemoveCoin";
 import { Coin } from "@/type/type";
 import { AppContext } from "@/context/AppContext";
+import { dataDemo } from "@/function/utilities";
 type Props = {};
 interface DataType {
   key: React.Key;
@@ -16,12 +23,28 @@ interface DataType {
   Holdings: number;
   AvgBuyPrice: number;
   Profit_Loss: number;
+  img: String;
+  symbol: String;
 }
 const MyAssets = (props: Props) => {
   const [isMAddTransitionOpen, setIsMAddTransition] = useState<boolean>(false);
   const [isMRemoveCoin, setisMRemoveCoin] = useState<boolean>(false);
 
-  const { myCoins }: any = useContext(AppContext);
+  const { listCoins, myCoins, setcoinSelected }: any = useContext(AppContext);
+  const data: DataType[] = myCoins?.map((item: any, index: number) => {
+    return {
+      key: index,
+      name: item?.state,
+      Price: listCoins?.find((coins: Coin) => {
+        return coins.name === item.state;
+      }).current_price,
+      Holdings: item?.quantity,
+      AvgBuyPrice: item?.AvgPurchasePrice,
+      Profit_Loss: null,
+      img: item?.item?.image,
+      symbol: item?.item?.symbol,
+    };
+  });
 
   const columns: TableColumnsType<DataType> = [
     {
@@ -35,14 +58,10 @@ const MyAssets = (props: Props) => {
       render: (_, record, text) => (
         <div className={styles.nameTable}>
           <div>
-            <img
-              src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
-              alt="BTC logo"
-              width="24px"
-            />
+            <img src={`${record?.img}`} alt="BTC logo" width="24px" />
           </div>
           <div className={styles.nameCoin}>{record.name}</div>
-          <div>Tag</div>
+          <div>{record?.symbol?.toUpperCase()}</div>
         </div>
       ),
     },
@@ -53,43 +72,96 @@ const MyAssets = (props: Props) => {
         compare: (a, b) => a.Price - b.Price,
         multiple: 3,
       },
+      render: (_, record, text) => <>{record?.Price?.toLocaleString("en")} </>,
     },
     {
       title: "Holdings",
       dataIndex: "Holdings",
       sorter: {
         compare: (a, b) => a.Holdings - b.Holdings,
-        multiple: 2,
+        multiple: 5,
       },
+      render: (_, record, text) => (
+        <div>
+          <div className={styles.nameCoin}>
+            $ {(record.Holdings * record?.Price).toLocaleString("en")}
+          </div>
+          <div>
+            {record.Holdings} {record.symbol.toUpperCase()}
+          </div>
+        </div>
+      ),
     },
     {
       title: "Avg. Buy Price",
       dataIndex: "AvgBuyPrice",
       sorter: {
         compare: (a, b) => a.AvgBuyPrice - b.AvgBuyPrice,
-        multiple: 2,
+        multiple: 5,
       },
+      render: (_, record, text) => (
+        <>{record?.AvgBuyPrice?.toLocaleString("en")} </>
+      ),
     },
     {
       title: "Profit/Loss",
       dataIndex: "Profit_Loss",
       sorter: {
         compare: (a, b) => a.Profit_Loss - b.Profit_Loss,
-        multiple: 2,
+        multiple: 5,
       },
+      render: (_, record, text) => (
+        <div>
+          <Statistic
+            value={
+              (record.Price - record.AvgBuyPrice) * record.Holdings < 0
+                ? (record.Price - record.AvgBuyPrice) * record.Holdings * -1
+                : (record.Price - record.AvgBuyPrice) * record.Holdings
+            }
+            precision={2}
+            valueStyle={{ fontSize: 15 }}
+            prefix={
+              <>{record.Price - record.AvgBuyPrice >= 0 ? "+ " : "- "}$</>
+            }
+          />
+          <Statistic
+            value={
+              (((record.Price - record.AvgBuyPrice) * record.Holdings) /
+                record.AvgBuyPrice) *
+              100
+            }
+            precision={2}
+            valueStyle={{ color: "#3f8600", fontSize: 15 }}
+            prefix={
+              record.Price - record.AvgBuyPrice >= 0 ? (
+                <CaretUpOutlined style={{ fontSize: 15 }} />
+              ) : (
+                <CaretDownFilled style={{ fontSize: 15, color: "red" }} />
+              )
+            }
+            suffix="%"
+          />
+        </div>
+      ),
     },
     {
       title: "Action",
       key: "operation",
       width: 100,
-      render: () => (
+      render: (_, record, text) => (
         <div className={styles.action}>
           <PlusOutlined
-            onClick={() => setIsMAddTransition(true)}
+            onClick={() => {
+              setIsMAddTransition(true);
+              setcoinSelected(record.name);
+            }}
             title="Add Transaction"
-          />{" "}
+          />
           <DeleteOutlined
-            onClick={() => setisMRemoveCoin(true)}
+            onClick={() => {
+              setisMRemoveCoin(true);
+              setcoinSelected(record.name);
+            }}
             title="Delete Transaction"
           />
         </div>
@@ -97,16 +169,6 @@ const MyAssets = (props: Props) => {
     },
   ];
 
-  const data: DataType[] = [
-    {
-      key: "1",
-      name: "ohn Brown",
-      Price: 98,
-      Holdings: 60,
-      AvgBuyPrice: 70,
-      Profit_Loss: 5,
-    },
-  ];
   const onChange: TableProps<DataType>["onChange"] = (
     pagination,
     filters,
@@ -120,7 +182,6 @@ const MyAssets = (props: Props) => {
       <MdAddTransition
         isMAddTransitionOpen={isMAddTransitionOpen}
         setIsMAddTransition={setIsMAddTransition}
-        coin=""
       />
       <MdRemoveCoin
         isMRemoveCoin={isMRemoveCoin}

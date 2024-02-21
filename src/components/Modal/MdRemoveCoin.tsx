@@ -1,8 +1,20 @@
 import { Button, Modal } from "antd";
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./Modal.module.css";
+import { AppContext } from "@/context/AppContext";
 
 const MdRemoveCoin = ({ isMRemoveCoin, setisMRemoveCoin }: any) => {
+  const { listCoins, myCoins, coinSelected, setMyCoins }: any =
+    useContext(AppContext);
+
+  const DeleteTransaction = () => {
+    setisMRemoveCoin(false)
+    setMyCoins(
+      myCoins.filter((item: any) => {
+        return item.state != coinSelected;
+      })
+    );
+  };
   return (
     <>
       <Modal
@@ -17,9 +29,11 @@ const MdRemoveCoin = ({ isMRemoveCoin, setisMRemoveCoin }: any) => {
         <div className={styles.RemoveMdal}>
           <div>All transactions associated with this coin will be removed.</div>
           <div>
-            <Button type="primary">Remove</Button>
+            <Button onClick={() => DeleteTransaction()} type="primary">
+              Remove
+            </Button>
           </div>
-          <div>
+          <div onClick={()=> setisMRemoveCoin(false)}>
             <Button type="default">Cancel</Button>
           </div>
         </div>

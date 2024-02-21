@@ -1,48 +1,62 @@
-.inforPortfolio{
-display: flex;
-width: 100%;
-justify-content: space-between;
+.inforPortfolio {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
-.leftInforPortfolio{
-    width: 100%;
-    display: block;
+.leftInforPortfolio {
+  width: 100%;
+  display: block;
 }
-.rightInforPortfolio span{
-        display: initial;
+.rightInforPortfolio span {
+  display: initial;
 }
-.Profit_loss{
-    text-decoration: inherit;
-    margin: 0px;
-    padding: 0px;
-    line-height: 150%;
-    display: initial;
-    font-size: 16px;
-    color: #16C784;
-    font-weight: 500;
+.Profit_loss {
+  text-decoration: inherit;
+  margin: 0px;
+  padding: 0px;
+  line-height: 150%;
+  display: initial;
+  font-size: 16px;
+  color: #16c784;
+  font-weight: 500;
 }
-.name{
-    display: flex;
-    align-items: center;
-    font-family: '__Inter_aaf875';
-    font-size: x-large;
+.name {
+  display: flex;
+  align-items: center;
+  font-family: "__Inter_aaf875";
+  font-size: x-large;
 }
-.avt{
-    width: 20px;
-    height: 20px;
-    border-radius: 100%;
-    display: flex;
-    -webkit-box-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    align-items: center;
-    margin: 0px 8px 0px 0px;
-    position: relative;
-    background-color: rgb(207, 214, 228);
+.avt {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  margin: 0px 8px 0px 0px;
+  position: relative;
+  background-color: rgb(207, 214, 228);
 }
-.totalMoney{
-    font-size: 30px;
-    font-weight: bold;
+.totalMoney {
+  font-size: 30px;
+  font-weight: bold;
 }
-.Profit_loss{
-    font-size: 16px;
+.Profit_loss {
+  font-size: 16px;
+}
+.antFlex {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.textChars {
+  width: 90px;
+}
+
+@media screen and (max-width:768px){
+  .textChars {
+    display: none !important;
+  }
 }

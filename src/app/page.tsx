@@ -3,7 +3,7 @@ import MyAssets from "@/components/MyAssets/MyAssets";
 import MyMainPortfolio from "@/components/MyMainPortfolio/MyMainPortfolio";
 import PortfolioPerformer from "@/components/PortfolioPerformer/PortfolioPerformer";
 import { AppContext, AppProvider } from "@/context/AppContext";
-import React, { useContext, useState } from "react";
+import React from "react";
 
 export default function Home() {
 
