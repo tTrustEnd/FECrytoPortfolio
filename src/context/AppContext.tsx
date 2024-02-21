@@ -7,7 +7,7 @@ export const AppContext = createContext({});
 export const AppProvider = memo(({ children }: any) => {
   const getData = async () => {
     const res = await handleGetCoinList();
-    setListCoins(res);
+    setListCoins(res||dataDemo);
   };
 
   useEffect(() => {
@@ -18,12 +18,13 @@ export const AppProvider = memo(({ children }: any) => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []); 
+  }, []);
 
   const [listCoins, setListCoins] = useState<any>([]);
   const [coinSelected, setcoinSelected] = useState("");
   const [myCoins, setMyCoins] = useState<any>([]);
   const [showChart, setshowChart] = useState(true);
+  const [type, setType] = useState("buy");
   return (
     <AppContext.Provider
       value={{
@@ -35,6 +36,8 @@ export const AppProvider = memo(({ children }: any) => {
         setcoinSelected,
         setshowChart,
         showChart,
+        setType,
+        type,
       }}
     >
       {children}

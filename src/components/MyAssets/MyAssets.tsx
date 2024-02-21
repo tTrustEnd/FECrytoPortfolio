@@ -28,21 +28,29 @@ interface DataType {
 const MyAssets = (props: Props) => {
   const [isMAddTransitionOpen, setIsMAddTransition] = useState<boolean>(false);
   const [isMRemoveCoin, setisMRemoveCoin] = useState<boolean>(false);
-
-  const { listCoins, myCoins, setcoinSelected }: any = useContext(AppContext);
+ 
+  const { listCoins, myCoins, setcoinSelected,setMyCoins }: any = useContext(AppContext);
+ 
   const data: DataType[] = myCoins?.map((item: any, index: number) => {
-    return {
-      key: index,
-      name: item?.state,
-      Price: listCoins?.find((coins: Coin) => {
-        return coins.name === item.state;
-      }).current_price,
-      Holdings: item?.quantity,
-      AvgBuyPrice: item?.AvgPurchasePrice,
-      Profit_Loss: null,
-      img: item?.item?.image,
-      symbol: item?.item?.symbol,
-    };
+    if (item?.quantity == 0){
+      setMyCoins(
+        myCoins.filter((mc: any) => {
+          return mc.state != item?.state;
+        })
+      );
+    }
+      return {
+        key: index,
+        name: item?.state,
+        Price: listCoins?.find((coins: Coin) => {
+          return coins.name === item?.state;
+        })?.current_price,
+        Holdings: item?.quantity,
+        AvgBuyPrice: item?.AvgPurchasePrice,
+        Profit_Loss: null,
+        img: item?.item?.image,
+        symbol: item?.item?.symbol,
+      };
   });
 
   const columns: TableColumnsType<DataType> = [
@@ -59,7 +67,7 @@ const MyAssets = (props: Props) => {
           <div>
             <img src={`${record?.img}`} alt="BTC logo" width="24px" />
           </div>
-          <div className={styles.nameCoin}>{record.name}</div>
+          <div className={styles.nameCoin}>{record?.name}</div>
           <div>{record?.symbol?.toUpperCase()}</div>
         </div>
       ),
@@ -83,10 +91,10 @@ const MyAssets = (props: Props) => {
       render: (_, record, text) => (
         <div>
           <div className={styles.nameCoin}>
-            $ {(record.Holdings * record?.Price).toLocaleString("en")}
+            $ {(record?.Holdings * record?.Price).toLocaleString("en")}
           </div>
           <div>
-            {record.Holdings} {record.symbol.toUpperCase()}
+            {record?.Holdings} {record?.symbol?.toUpperCase()}
           </div>
         </div>
       ),
@@ -113,26 +121,26 @@ const MyAssets = (props: Props) => {
         <div>
           <Statistic
             value={
-              (record.Price - record.AvgBuyPrice) * record.Holdings < 0
-                ? (record.Price - record.AvgBuyPrice) * record.Holdings * -1
-                : (record.Price - record.AvgBuyPrice) * record.Holdings
+              (record?.Price - record?.AvgBuyPrice) * record?.Holdings < 0
+                ? (record?.Price - record?.AvgBuyPrice) * record?.Holdings * -1
+                : (record?.Price - record?.AvgBuyPrice) * record?.Holdings
             }
             precision={2}
             valueStyle={{ fontSize: 15 }}
             prefix={
-              <>{record.Price - record.AvgBuyPrice >= 0 ? "+ " : "- "}$</>
+              <>{record?.Price - record?.AvgBuyPrice >= 0 ? "+ " : "- "}$</>
             }
           />
           <Statistic
             value={
-              (((record.Price - record.AvgBuyPrice) * record.Holdings) /
-                record.AvgBuyPrice) *
+              (((record?.Price - record?.AvgBuyPrice) * record?.Holdings) /
+                record?.AvgBuyPrice) *
               100
             }
             precision={2}
             valueStyle={{ color: "#3f8600", fontSize: 15 }}
             prefix={
-              record.Price - record.AvgBuyPrice >= 0 ? (
+              record?.Price - record?.AvgBuyPrice >= 0 ? (
                 <CaretUpOutlined style={{ fontSize: 15 }} />
               ) : (
                 <CaretDownFilled style={{ fontSize: 15, color: "red" }} />
@@ -152,14 +160,14 @@ const MyAssets = (props: Props) => {
           <PlusOutlined
             onClick={() => {
               setIsMAddTransition(true);
-              setcoinSelected(record.name);
+              setcoinSelected(record?.name);
             }}
             title="Add Transaction"
           />
           <DeleteOutlined
             onClick={() => {
               setisMRemoveCoin(true);
-              setcoinSelected(record.name);
+              setcoinSelected(record?.name);
             }}
             title="Delete Transaction"
           />

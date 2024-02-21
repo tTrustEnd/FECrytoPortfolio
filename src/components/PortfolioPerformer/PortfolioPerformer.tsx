@@ -25,8 +25,8 @@ const PortfolioPerformer = (props: Props) => {
       key: index,
       name: item?.state,
       Price: listCoins?.find((coins: Coin) => {
-        return coins.name === item.state;
-      }).current_price,
+        return coins.name === item?.state;
+      })?.current_price,
       Holdings: item?.quantity,
       AvgBuyPrice: item?.AvgPurchasePrice,
       Profit_Loss: null,

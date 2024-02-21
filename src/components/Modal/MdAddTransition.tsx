@@ -1,5 +1,5 @@
 import { Button, Modal, Tabs, TabsProps } from "antd";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import BuySell from "./AddTransactionAction/BuySell";
 import { AppContext } from "@/context/AppContext";
 
@@ -9,20 +9,29 @@ const MdAddTransition = ({
   isMAddTransitionOpen,
   setIsMAddTransition,
 }: any) => {
+  const { setType,type }: any = useContext(AppContext);
   const onChange = (key: string) => {
-    console.log(key);
+    if (key === "1") {
+      setType("buy");
+    }
+    if (key === "2") {
+      setType("sell");
+    }
   };
+  useEffect(() => {
+    setType("buy");
+  }, [isMAddTransitionOpen]);
 
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: "Buy",
-      children: <BuySell setIsMAddTransition={setIsMAddTransition} type="buy" />,
+      children: <BuySell setIsMAddTransition={setIsMAddTransition} />,
     },
     {
       key: "2",
       label: "Sell",
-      children: <BuySell setIsMAddTransition={setIsMAddTransition} type="sell" />,
+      children: <BuySell setIsMAddTransition={setIsMAddTransition} />,
     },
     {
       key: "3",
@@ -41,6 +50,7 @@ const MdAddTransition = ({
         <Tabs
           centered
           defaultActiveKey="1"
+          activeKey={type==="buy"?"1":"2"}
           items={items}
           onChange={onChange}
           size="small"

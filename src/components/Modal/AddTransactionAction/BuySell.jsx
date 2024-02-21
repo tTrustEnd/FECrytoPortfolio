@@ -7,7 +7,7 @@ import { InputNumber } from "antd";
 import { AppContext } from "@/context/AppContext";
 import { formatState, formatState2 } from "@/function/utilities";
 
-const BuySell = ({ type, setIsMAddTransition }) => {
+const BuySell = ({ setIsMAddTransition }) => {
   const {
     listCoins,
     setListCoins,
@@ -15,10 +15,12 @@ const BuySell = ({ type, setIsMAddTransition }) => {
     setMyCoins,
     coinSelected,
     setcoinSelected,
+    type,
   } = useContext(AppContext);
   const [PricePer, setPricePer] = useState();
   const [Quantity, setQuantity] = useState(0);
   const [check, setcheck] = useState(false);
+  
   useEffect(() => {
     $(".js-example-basic-single").select2({
       templateResult: formatState,
@@ -41,7 +43,6 @@ const BuySell = ({ type, setIsMAddTransition }) => {
       setPricePer([]);
     };
   }, [coinSelected]);
-
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const formElements = event.target.querySelectorAll("[name]");
@@ -60,16 +61,23 @@ const BuySell = ({ type, setIsMAddTransition }) => {
       return;
     }
     setcheck(false);
-    if (isExis) {
+    if (type === "sell" && !isExis) {
+      alert("Bạn chưa sở hữu coin này, không thể bán!!");
+      return;
+    }
+    if (type === "sell" && isExis) {
       const updatedMyCoins = myCoins.map((item) => {
-        if (item.state === updatedCoins.state) {
+        if (
+          item.state === updatedCoins.state &&
+          Number(item.quantity) - Number(updatedCoins.quantity) >= 0
+        ) {
           return {
             ...item,
-            quantity: Number(item.quantity) + Number(updatedCoins.quantity),
+            quantity: Number(item.quantity) - Number(updatedCoins.quantity),
             AvgPurchasePrice:
-              (Number(item?.AvgPurchasePrice) * item?.quantity +
+              (Number(item?.AvgPurchasePrice) * item?.quantity -
                 updatedCoins?.quantity * updatedCoins?.AvgPurchasePrice) /
-              (Number(item?.quantity) + Number(updatedCoins?.quantity)),
+              (Number(item?.quantity) - Number(updatedCoins?.quantity)),
           };
         }
         return item;
@@ -77,12 +85,32 @@ const BuySell = ({ type, setIsMAddTransition }) => {
 
       setMyCoins(updatedMyCoins);
       setIsMAddTransition(false);
-    } else {
-      const item = listCoins.find((item) => {
-        return item.name === updatedCoins.state;
-      });
-      setMyCoins([...myCoins, { ...updatedCoins, item }]);
-      setIsMAddTransition(false);
+    }
+    if (type === "buy") {
+      if (isExis) {
+        const updatedMyCoins = myCoins.map((item) => {
+          if (item.state === updatedCoins.state) {
+            return {
+              ...item,
+              quantity: Number(item.quantity) + Number(updatedCoins.quantity),
+              AvgPurchasePrice:
+                (Number(item?.AvgPurchasePrice) * item?.quantity +
+                  updatedCoins?.quantity * updatedCoins?.AvgPurchasePrice) /
+                (Number(item?.quantity) + Number(updatedCoins?.quantity)),
+            };
+          }
+          return item;
+        });
+
+        setMyCoins(updatedMyCoins);
+        setIsMAddTransition(false);
+      } else {
+        const item = listCoins.find((item) => {
+          return item.name === updatedCoins.state;
+        });
+        setMyCoins([...myCoins, { ...updatedCoins, item }]);
+        setIsMAddTransition(false);
+      }
     }
   };
 
@@ -94,7 +122,7 @@ const BuySell = ({ type, setIsMAddTransition }) => {
           className="js-example-basic-single"
           name="state"
           value={coinSelected}
-          onChange={()=>{}}
+          onChange={() => {}}
         >
           {listCoins?.map((item) => {
             return (

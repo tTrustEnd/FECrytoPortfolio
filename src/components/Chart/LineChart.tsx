@@ -1,13 +1,11 @@
 import { handleGetHisCharts } from "@/api/coin";
 import { AppContext } from "@/context/AppContext";
 import { convertMillisecondsToDateString } from "@/function/utilities";
-import { Coin } from "@/type/type";
 import React, {
   memo,
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 
@@ -28,7 +26,7 @@ const LineChart = memo(() => {
 
   const handleDec = useCallback(async () => {
     if (!myCoins) {
-      return;
+      return; 
     }
 
     const updatedList: any = await Promise.all(
@@ -44,36 +42,34 @@ const LineChart = memo(() => {
       })
     );
     setlistHis(updatedList);
+  
   }, [myCoins]);
 
   useEffect(() => {
     handleDec();
     return () => {};
   }, [myCoins]);
-
-  const data: any = useMemo(() => {
-    return {
-      labels: listHis[0]?.arrTime,
-      datasets: myCoins.map((item: any, index: number) => {
-        const color = getRandomColor();
-        return {
-          label: item?.state,
-          data: listHis[index]?.arr,
-          borderColor: color,
-          backgroundColor: color,
-          borderWidth: 2,
-          fill: false,
-        };
-      }),
-    };
-  }, [myCoins]);
+  const data: any = {
+    labels: listHis[0]?.arrTime,
+    datasets: myCoins.map((item: any, index: number) => {
+      const color = getRandomColor();
+      return {
+        label: item?.state,
+        data: listHis[index]?.arr,
+        borderColor: color,
+        backgroundColor: color,
+        borderWidth: 2,
+        fill: false,
+      };
+    }),
+  };
 
   const options: any = {
     scales: {
       y: {
         title: {
           display: true,
-          text: "USD",
+          text: 'USD', 
         },
       },
     },

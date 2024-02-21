@@ -20,7 +20,7 @@ const MyMainPortfolio = (props: Props) => {
   let totalPortfolio: number = 0;
   listCoins?.find((item: Coin) => {
     myCoins?.map((myc: any) => {
-      if (item.name === myc.state) {
+      if (item.name === myc?.state) {
         totalPortfolio += +item?.current_price * myc?.quantity;
       }
     });
