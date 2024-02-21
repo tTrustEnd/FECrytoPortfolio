@@ -16,3 +16,11 @@
 .tagCoin {
   font-family: system-ui;
 }
+.RemoveMdal{
+  display: block;
+  width: 100%;
+}
+.RemoveMdal button{
+  width: 100%;
+  margin-top: 15px;
+}

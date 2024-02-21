@@ -1,7 +1,14 @@
-.action{
-    display: flex;
-    gap: 20px;
+.action {
+  display: flex;
+  gap: 20px;
 }
-.action svg{
-    cursor: pointer;
+.action svg {
+  cursor: pointer;
+}
+.nameTable {
+  display: flex;
+  gap: 5px;
+}
+.nameCoin {
+  font-weight: 600;
 }

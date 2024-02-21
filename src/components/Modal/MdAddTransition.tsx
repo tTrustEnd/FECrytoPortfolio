@@ -7,7 +7,8 @@ type Props = {};
 const MdAddTransition = ({
   isMAddTransitionOpen,
   setIsMAddTransition,
-  coin
+  coin,
+  listCoins
 }: any) => {
   const onChange = (key: string) => {
     console.log(key);
@@ -17,12 +18,12 @@ const MdAddTransition = ({
     {
       key: "1",
       label: "Buy",
-      children: <BuySell type="buy" />,
+      children: <BuySell listCoins={listCoins} type="buy" />,
     },
     {
       key: "2",
       label: "Sell",
-      children: <BuySell type="sell" />,
+      children: <BuySell listCoins={listCoins} type="sell" />,
     },
     {
       key: "3",

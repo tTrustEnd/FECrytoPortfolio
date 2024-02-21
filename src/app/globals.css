@@ -29,3 +29,8 @@ body {
   flex-direction: column!important;
   height: 40px !important;
 }
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #fff #fff; /* Track and thumb colors */
+}
+

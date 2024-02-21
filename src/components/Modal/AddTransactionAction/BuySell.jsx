@@ -4,21 +4,15 @@ import $ from "jquery";
 import "select2";
 import style from "./Buy.module.css";
 import { InputNumber } from "antd";
-const BuySell = ({ type }) => {
+const BuySell = ({ listCoins, type }) => {
   useEffect(() => {
     function formatState(state) {
       if (!state.id) {
         return state.text;
       }
-      var baseUrl = "/user/pages/images/flags";
+      var imageUrl = state.element.getAttribute("data-image");
       var $state = $(
-        '<span><img src="' +
-          baseUrl +
-          "/" +
-          state.element.value.toLowerCase() +
-          '.png" class="img-flag" /> ' +
-          state.text +
-          "</span>"
+        `<span><img src="${imageUrl}"  width="24px" class="img-flag" /> ${state.text}</span>`
       );
 
       return $state;
@@ -28,17 +22,10 @@ const BuySell = ({ type }) => {
         return state.text;
       }
 
-      var baseUrl = "/user/pages/images/flags";
-      var $state = $('<span><img class="img-flag" /> <span></span></span>');
-
-      // Use .text() instead of HTML string concatenation to avoid script injection issues
-      $state.find("span").text(state.text);
-      $state
-        .find("img")
-        .attr(
-          "src",
-          baseUrl + "/" + state.element.value.toLowerCase() + ".png"
-        );
+      var imageUrl = state.element.getAttribute("data-image");
+      var $state = $(
+        `<span><img src="${imageUrl}"  width="24px" class="img-flag" /> ${state.text}</span>`
+      );
 
       return $state;
     }
@@ -48,7 +35,9 @@ const BuySell = ({ type }) => {
       templateSelection: formatState2,
     });
 
-    return () => {};
+    return () => {
+      $(".js-example-basic-single").select2("destroy");
+    };
   }, []);
 
   return (
@@ -58,9 +47,13 @@ const BuySell = ({ type }) => {
         className="js-example-basic-single"
         name="state"
       >
-        <option value="AL">Alabama</option>
-        ...
-        <option value="WY">Wyoming</option>
+        {listCoins?.map((item) => {
+          return (
+            <option key={item?.id}  data-image={item?.image}>
+              {item.name + item?.symbol}
+            </option>
+          );
+        })}
       </select>
       <div className={style.GInput}>
         <div style={{ width: "100%" }}>

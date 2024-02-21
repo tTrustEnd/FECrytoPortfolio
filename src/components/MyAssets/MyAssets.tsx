@@ -1,9 +1,12 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./MyAssets.module.css";
 import { Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import MdAddTransition from "../Modal/MdAddTransition";
+import MdRemoveCoin from "../Modal/MdRemoveCoin";
+import { Coin } from "@/type/type";
 type Props = {};
 interface DataType {
   key: React.Key;
@@ -14,6 +17,11 @@ interface DataType {
   Profit_Loss: number;
 }
 const MyAssets = (props: Props) => {
+  const [isMAddTransitionOpen, setIsMAddTransition] = useState<boolean>(false);
+  const [isMRemoveCoin, setisMRemoveCoin] = useState<boolean>(false);
+
+  const [mycoin, setMycoin] = useState<Coin[]>([]);
+
   const columns: TableColumnsType<DataType> = [
     {
       title: "Name",
@@ -23,6 +31,19 @@ const MyAssets = (props: Props) => {
         compare: (a, b) => a.name.localeCompare(b.name),
         multiple: 3,
       },
+      render: (_, record, text) => (
+        <div className={styles.nameTable}>
+          <div>
+            <img
+              src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+              alt="BTC logo"
+              width="24px"
+            />
+          </div>
+          <div className={styles.nameCoin}>{record.name}</div>
+          <div>Tag</div>
+        </div>
+      ),
     },
     {
       title: "Price",
@@ -62,8 +83,14 @@ const MyAssets = (props: Props) => {
       width: 100,
       render: () => (
         <div className={styles.action}>
-          <PlusOutlined title="Add Transaction" />{" "}
-          <DeleteOutlined title="Delete Transaction" />
+          <PlusOutlined
+            onClick={() => setIsMAddTransition(true)}
+            title="Add Transaction"
+          />{" "}
+          <DeleteOutlined
+            onClick={() => setisMRemoveCoin(true)}
+            title="Delete Transaction"
+          />
         </div>
       ),
     },
@@ -89,6 +116,15 @@ const MyAssets = (props: Props) => {
   };
   return (
     <div className={styles.cMyAssets}>
+      <MdAddTransition
+        isMAddTransitionOpen={isMAddTransitionOpen}
+        setIsMAddTransition={setIsMAddTransition}
+        coin=""
+      />
+      <MdRemoveCoin
+        isMRemoveCoin={isMRemoveCoin}
+        setisMRemoveCoin={setisMRemoveCoin}
+      />
       <h3>Assets</h3>
       <Table
         columns={columns}

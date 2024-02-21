@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import styles from "./MyMainPortfolio.module.css";
 import { Button, Flex } from "antd";
 import MdSelectCoin from "../Modal/MdSelectCoin";
-import MdAddTransition from "../Modal/MdAddTransition";
 type Props = {};
 
 const MyMainPortfolio = (props: Props) => {
   const [isMdSelectCoinOpen, setIsMdSelectCoinOpen] = useState<boolean>(false);
-  const [isMAddTransitionOpen, setIsMAddTransition] = useState<boolean>(true);
   return (
     <>
       <MdSelectCoin
