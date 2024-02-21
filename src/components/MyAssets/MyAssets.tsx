@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./MyAssets.module.css";
 import { Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
@@ -7,6 +7,7 @@ import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import MdAddTransition from "../Modal/MdAddTransition";
 import MdRemoveCoin from "../Modal/MdRemoveCoin";
 import { Coin } from "@/type/type";
+import { AppContext } from "@/context/AppContext";
 type Props = {};
 interface DataType {
   key: React.Key;
@@ -20,7 +21,7 @@ const MyAssets = (props: Props) => {
   const [isMAddTransitionOpen, setIsMAddTransition] = useState<boolean>(false);
   const [isMRemoveCoin, setisMRemoveCoin] = useState<boolean>(false);
 
-  const [mycoin, setMycoin] = useState<Coin[]>([]);
+  const { myCoins }: any = useContext(AppContext);
 
   const columns: TableColumnsType<DataType> = [
     {

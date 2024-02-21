@@ -1,6 +1,7 @@
 import { Button, Modal, Tabs, TabsProps } from "antd";
-import React from "react";
+import React, { useContext } from "react";
 import BuySell from "./AddTransactionAction/BuySell";
+import { AppContext } from "@/context/AppContext";
 
 type Props = {};
 
@@ -8,8 +9,8 @@ const MdAddTransition = ({
   isMAddTransitionOpen,
   setIsMAddTransition,
   coin,
-  listCoins
 }: any) => {
+
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -18,12 +19,12 @@ const MdAddTransition = ({
     {
       key: "1",
       label: "Buy",
-      children: <BuySell listCoins={listCoins} type="buy" />,
+      children: <BuySell type="buy" />,
     },
     {
       key: "2",
       label: "Sell",
-      children: <BuySell listCoins={listCoins} type="sell" />,
+      children: <BuySell type="sell" />,
     },
     {
       key: "3",
@@ -48,10 +49,6 @@ const MdAddTransition = ({
           tabBarGutter={100}
         />
       </div>
-
-      <Button style={{ width: "100%" }} type="primary">
-        Add Transition
-      </Button>
     </Modal>
   );
 };
