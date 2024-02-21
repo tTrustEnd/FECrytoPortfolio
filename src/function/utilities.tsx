@@ -3017,3 +3017,15 @@ export function formatState2(state: any) {
 
   return $state;
 }
+export function convertMillisecondsToDateString(milliseconds:any) {
+  const date = new Date(milliseconds);
+
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Tháng bắt đầu từ 0
+  const year = date.getFullYear();
+
+  // Để có dạng "dd/mm/yyyy", bạn có thể sử dụng template string
+  const dateString = `${day}/${month}/${year}`;
+
+  return dateString;
+}

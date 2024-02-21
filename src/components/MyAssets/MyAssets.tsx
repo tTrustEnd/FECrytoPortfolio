@@ -7,7 +7,6 @@ import {
   CaretDownFilled,
   CaretUpOutlined,
   DeleteOutlined,
-  MinusOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import MdAddTransition from "../Modal/MdAddTransition";
@@ -78,7 +77,7 @@ const MyAssets = (props: Props) => {
       title: "Holdings",
       dataIndex: "Holdings",
       sorter: {
-        compare: (a, b) => a.Holdings - b.Holdings,
+        compare: (a, b) => a.Holdings * a.Price - b.Holdings * b.Price,
         multiple: 5,
       },
       render: (_, record, text) => (
@@ -192,7 +191,8 @@ const MyAssets = (props: Props) => {
         columns={columns}
         dataSource={data}
         onChange={onChange}
-        style={{ overflow: "auto" }}
+        style={{ overflowX: "auto", overflowY: "hidden" }}
+        pagination={false}
       />
     </div>
   );

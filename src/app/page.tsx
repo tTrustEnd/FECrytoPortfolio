@@ -1,12 +1,13 @@
 "use client";
+import LineChart from "@/components/Chart/LineChart";
 import MyAssets from "@/components/MyAssets/MyAssets";
 import MyMainPortfolio from "@/components/MyMainPortfolio/MyMainPortfolio";
 import PortfolioPerformer from "@/components/PortfolioPerformer/PortfolioPerformer";
 import { AppContext, AppProvider } from "@/context/AppContext";
-import React from "react";
+import React, { useContext } from "react";
+import "chart.js/auto"; // Importing 'chart.js/auto' for Chart.js version 3.x
 
 export default function Home() {
-
   return (
     <>
       <link
@@ -18,6 +19,7 @@ export default function Home() {
         <AppProvider>
           <MyMainPortfolio />
           <PortfolioPerformer />
+          <LineChart />
           <MyAssets />
         </AppProvider>
       </div>

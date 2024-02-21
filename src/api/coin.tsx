@@ -11,6 +11,20 @@ export const handleGetCoinList = async () => {
     );
     const data = await res.json();
     return data;
-  } catch (error) {
-  }
+  } catch (error) {}
+};
+export const handleGetHisCharts = async (id: string) => {
+  try {
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=14&interval=daily`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {}
 };

@@ -10,14 +10,11 @@ const MyMainPortfolio = (props: Props) => {
   const [isMdSelectCoinOpen, setIsMdSelectCoinOpen] = useState<boolean>(false);
   const {
     listCoins,
-    setListCoins,
     myCoins,
-    setMyCoins,
-    coinSelected,
-    setcoinSelected,
+    setshowChart,
   }: any = useContext(AppContext);
   const onChange = (checked: boolean) => {
-    console.log(`switch to ${checked}`);
+    setshowChart(checked);
   };
 
   let totalPortfolio: number = 0;
@@ -50,11 +47,7 @@ const MyMainPortfolio = (props: Props) => {
         </div>
 
         <div className={styles.rightInforPortfolio}>
-          <Flex
-            gap="small"
-            wrap="nowrap"
-            className={styles.antFlex}
-          >
+          <Flex gap="small" wrap="nowrap" className={styles.antFlex}>
             <div className={styles.textChars}>Show Chars</div>
             <Switch defaultChecked onChange={onChange} />
             <Button
