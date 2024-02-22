@@ -1,9 +1,11 @@
 import { RightOutlined } from "@ant-design/icons";
 import React, { useContext, useEffect, useState } from "react";
-
+import $ from "jquery";
+import "select2";
 import style from "./Buy.module.css";
 import { InputNumber } from "antd";
 import { AppContext } from "@/context/AppContext";
+import { formatState, formatState2 } from "@/function/utilities";
 
 const BuySell = ({ setIsMAddTransition }) => {
   const {
@@ -20,7 +22,18 @@ const BuySell = ({ setIsMAddTransition }) => {
   const [check, setcheck] = useState(false);
   
   useEffect(() => {
-    
+    $(".js-example-basic-single").select2({
+      templateResult: formatState,
+      selectOnClose: true,
+      templateSelection: formatState2,
+    });
+    $(".js-example-basic-single").on("select2:select", function (e) {
+      const item = listCoins.find((item) => {
+        return item.name === e.target.value;
+      });
+      setcoinSelected(e.target.value);
+      setPricePer(item?.current_price);
+    });
     setPricePer(
       listCoins.find((item) => {
         return item.name === coinSelected;
