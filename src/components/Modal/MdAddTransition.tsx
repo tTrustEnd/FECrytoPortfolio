@@ -2,6 +2,7 @@ import { Button, Modal, Tabs, TabsProps } from "antd";
 import React, { useContext, useEffect } from "react";
 import BuySell from "./AddTransactionAction/BuySell";
 import { AppContext } from "@/context/AppContext";
+import dynamic from "next/dynamic";
 
 type Props = {};
 
@@ -22,6 +23,8 @@ const MdAddTransition = ({
     setType("buy");
   }, [isMAddTransitionOpen]);
 
+  const BuySell = dynamic(()=> import("./AddTransactionAction/BuySell"))
+
   const items: TabsProps["items"] = [
     {
       key: "1",
@@ -33,11 +36,7 @@ const MdAddTransition = ({
       label: "Sell",
       children: <BuySell setIsMAddTransition={setIsMAddTransition} />,
     },
-    {
-      key: "3",
-      label: "Transfer",
-      children: "Content of Tab Pane 3",
-    },
+
   ];
   return (
     <Modal

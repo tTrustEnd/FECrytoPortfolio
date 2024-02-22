@@ -2994,29 +2994,7 @@ export const dataDemo = [
     last_updated: "2024-02-21T06:12:09.531Z",
   },
 ];
-export function formatState(state: any) {
-  if (!state.id) {
-    return state.text;
-  }
-  var imageUrl = state.element.getAttribute("data-image");
-  var $state = $(
-    `<span><img src="${imageUrl}"  width="24px" class="img-flag" /> ${state.text}</span>`
-  );
 
-  return $state;
-}
-export function formatState2(state: any) {
-  if (!state.id) {
-    return state.text;
-  }
-
-  var imageUrl = state.element.getAttribute("data-image");
-  var $state = $(
-    `<span><img src="${imageUrl}"  width="24px" class="img-flag" /> ${state.text}</span>`
-  );
-
-  return $state;
-}
 export function convertMillisecondsToDateString(milliseconds:any) {
   const date = new Date(milliseconds);
 

@@ -1,11 +1,10 @@
 import { RightOutlined } from "@ant-design/icons";
 import React, { useContext, useEffect, useState } from "react";
 import $ from "jquery";
-import "select2";
+import "select2/dist/js/select2";
 import style from "./Buy.module.css";
 import { InputNumber } from "antd";
 import { AppContext } from "@/context/AppContext";
-import { formatState, formatState2 } from "@/function/utilities";
 
 const BuySell = ({ setIsMAddTransition }) => {
   const {
@@ -20,20 +19,47 @@ const BuySell = ({ setIsMAddTransition }) => {
   const [PricePer, setPricePer] = useState();
   const [Quantity, setQuantity] = useState(0);
   const [check, setcheck] = useState(false);
-  
+
   useEffect(() => {
-    $(".js-example-basic-single").select2({
-      templateResult: formatState,
-      selectOnClose: true,
-      templateSelection: formatState2,
-    });
-    $(".js-example-basic-single").on("select2:select", function (e) {
-      const item = listCoins.find((item) => {
-        return item.name === e.target.value;
+    if (typeof window !== "undefined") {
+      $(document).ready(function () {
+        function formatState(state) {
+          if (!state.id) {
+            return state.text;
+          }
+          var imageUrl = state.element.getAttribute("data-image");
+          var $state = $(
+            `<span><img src="${imageUrl}"  width="24px" class="img-flag" /> ${state.text}</span>`
+          );
+
+          return $state;
+        }
+        function formatState2(state) {
+          if (!state.id) {
+            return state.text;
+          }
+
+          var imageUrl = state.element.getAttribute("data-image");
+          var $state = $(
+            `<span><img src="${imageUrl}"  width="24px" class="img-flag" /> ${state.text}</span>`
+          );
+
+          return $state;
+        }
+        $(".js-example-basic-single").select2({
+          templateResult: formatState,
+          selectOnClose: true,
+          templateSelection: formatState2,
+        });
+        $(".js-example-basic-single").on("select2:select", function (e) {
+          const item = listCoins.find((item) => {
+            return item.name === e.target.value;
+          });
+          setcoinSelected(e.target.value);
+          setPricePer(item?.current_price);
+        });
       });
-      setcoinSelected(e.target.value);
-      setPricePer(item?.current_price);
-    });
+    }
     setPricePer(
       listCoins.find((item) => {
         return item.name === coinSelected;
