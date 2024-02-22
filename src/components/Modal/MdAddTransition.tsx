@@ -1,5 +1,5 @@
 import { Button, Modal, Tabs, TabsProps } from "antd";
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import BuySell from "./AddTransactionAction/BuySell";
 import { AppContext } from "@/context/AppContext";
 import dynamic from "next/dynamic";
@@ -23,7 +23,7 @@ const MdAddTransition = ({
     setType("buy");
   }, [isMAddTransitionOpen]);
 
-  const BuySell = dynamic(()=> import("./AddTransactionAction/BuySell"))
+  const BuySell = useCallback(dynamic(()=> import("./AddTransactionAction/BuySell")),[])
 
   const items: TabsProps["items"] = [
     {
